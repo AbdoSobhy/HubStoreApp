@@ -1,0 +1,6 @@
+framework module Pods_HubStoreApp {
+  umbrella header "Pods-HubStoreApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
