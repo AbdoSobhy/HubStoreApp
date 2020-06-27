@@ -10,24 +10,20 @@ import Foundation
 import Alamofire
 
 class ApiRequest {
-    static func fetchRepos(_ completionHandeler : @escaping (Result<[Repositorie],Error>) -> Void){
+    static func fetchRepos<T : Codable>(_ completionHandeler : @escaping (T?,Error?) -> Void){
         AF.request(ApiRouter.getRepos).responseData { (response : AFDataResponse<Data>) in
             switch response.result{
             case .success(let repos):
-                
                 do {
-                    let json = try JSONDecoder().decode([Repositorie].self, from: repos)
-                    completionHandeler(.success(json))
+                    let json = try JSONDecoder().decode(T.self, from: repos)
+                    completionHandeler(json,nil)
                     
                 } catch {
-                    completionHandeler(.failure(error))
-                    
+                    completionHandeler(nil,error)
                 }
                 
             case .failure(let err):
-                
-                completionHandeler(.failure(err))
-                
+                completionHandeler(nil,err)
             }
         }
         

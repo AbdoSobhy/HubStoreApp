@@ -34,13 +34,13 @@ class ReopsViewControllerPresenterImpl : ReopsViewControllerPresenter {
     
     func getRepos(_ completionHandeller : @escaping ([Repositorie]) -> Void) {
         view?.startLoadingIndicator()
-        ApiRequest.fetchRepos { reaponse in
-            switch reaponse{
-            case .success(let repos):
+        ApiRequest.fetchRepos { (reaponse : [Repositorie]? , err) in
+            if let repos = reaponse {
                 self.view?.stopLoadingIndicator()
                 self.repos.append(contentsOf: repos)
                 completionHandeller(repos)
-            case .failure(_):
+            }
+            else {
                 self.view?.stopLoadingIndicator()
                 self.view?.showAlert(title: "Wrong User!", message: "Please enter correct username")
             }
